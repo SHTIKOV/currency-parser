@@ -1,4 +1,5 @@
 STAN=./vendor/bin/phpstan --memory-limit=1024M
+CS_FIXER=./vendor/bin/php-cs-fixer
 
 .PHONY: analyze
 analyze:
@@ -15,3 +16,6 @@ example-download:
 .PHONY: example-print
 example-print:
 	php ./examples/print.php
+
+cs-fix:
+	$(CS_FIXER) fix src
