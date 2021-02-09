@@ -1,6 +1,10 @@
 <?php declare (strict_types=1);
 
-require_once __DIR__ . '/../src/Kernel.php';
+require_once __DIR__ . '/../src/Parser.php';
 
-$kernel = new MaxCurrency\Kernel();
-dump($kernel);
+$parser = new MaxCurrency\Parser\Curl();
+dump($parser->getCurrencyData('AUD'));
+
+$parser = new MaxCurrency\Parser\File();
+dump($parser->getCurrencyData('AUD'));
+
