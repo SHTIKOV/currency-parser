@@ -7,7 +7,7 @@ analyze:
 
 .PHONY: tests
 tests:
-	./vendor/bin/phpunit --stop-on-error --stop-on-failure tests
+	./vendor/bin/phpunit --stop-on-error --stop-on-failure ./tests/ParserTest.php 
 
 .PHONY: example-download
 example-download:
