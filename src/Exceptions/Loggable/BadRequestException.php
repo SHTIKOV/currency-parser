@@ -2,15 +2,14 @@
 
 namespace MaxCurrency\Exception\Loggable;
 
+use MaxCurrency\Exception;
+
 /**
  * BadRequestException.
  *
  * @author Константин Штыков <konstantine.shtikov@yandex.ru>
  */
-class BadRequestException extends \Exception implements ExceptionInterface
+class BadRequestException extends Exception\BadRequestException implements ExceptionInterface
 {
-    public function __construct(string $message)
-    {
-        parent::__construct($message, 400);
-    }
+
 }

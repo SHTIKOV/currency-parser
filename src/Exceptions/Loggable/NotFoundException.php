@@ -2,15 +2,14 @@
 
 namespace MaxCurrency\Exception\Loggable;
 
+use MaxCurrency\Exception;
+
 /**
  * NotFoundException.
  *
  * @author Константин Штыков <konstantine.shtikov@yandex.ru>
  */
-class NotFoundException extends \Exception implements ExceptionInterface
+class NotFoundException extends Exception\BadRequestException implements ExceptionInterface
 {
-    public function __construct(string $message)
-    {
-        parent::__construct($message, 404);
-    }
+
 }
