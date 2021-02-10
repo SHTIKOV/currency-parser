@@ -5,7 +5,7 @@ namespace MaxCurrency\Parser;
 use MaxCurrency\Exception\InternalServerException;
 use MaxCurrency\Exception\NotFoundException;
 use MaxCurrency\ParserAbstract;
-use MaxCurrency\Entity\CurrencyData;
+use MaxCurrency\Response;
 
 /**
  * Parser model of curl
@@ -14,7 +14,12 @@ use MaxCurrency\Entity\CurrencyData;
  */
 final class Curl extends ParserAbstract
 {
-    protected function request(): CurrencyData
+    protected function getLoggerName(): string
+    {
+        return 'CurlParser';
+    }
+
+    protected function request(): Response
     {
         $curl = new \Curl\Curl();
         $curl->get(ParserAbstract::API_URL);
@@ -28,6 +33,6 @@ final class Curl extends ParserAbstract
             throw new NotFoundException('Response not found');
         }
 
-        return new CurrencyData($response);
+        return new Response($response);
     }
 }

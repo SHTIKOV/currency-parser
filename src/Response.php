@@ -1,19 +1,18 @@
 <?php declare(strict_types=1);
 
-namespace MaxCurrency\Entity;
+namespace MaxCurrency;
 
 use MaxCurrency\Exception\NotFoundException;
-use MaxCurrency\CommonClasses\StrictFillTrait;
+use MaxCurrency\CommonClasses\FillableAbstract;
+use MaxCurrency\Entity\Currency;
 
 /**
- * Currency data
+ * Response
  *
  * @author Konstantin Shtykov <konstantine.shtikov@yandex.ru>
  */
-class CurrencyData
+class Response extends FillableAbstract
 {
-    use StrictFillTrait;
-
     const DEFAULT_NAME = 'None';
 
     /** @var \DateTime|null */
@@ -28,22 +27,8 @@ class CurrencyData
     private $valutes = [];
 
 
-    /**
-     * @param array<mixed> $data
-     */
-    public function __construct(array $data)
+    protected function fill(array $data): Response
     {
-        $this->fill($data);
-    }
-
-
-    /**
-     * @param array<mixed> $data
-     */
-    protected function fill(array $data): CurrencyData
-    {
-        $this->checkFields($data);
-        
         $this->setDate(new \DateTime($data['Date']));
         $this->setPreviousDate(new \DateTime($data['PreviousDate']));
         $this->setPreviousUrl($data['PreviousURL']);
@@ -58,7 +43,7 @@ class CurrencyData
         return $this->date;
     }
 
-    public function setDate(?\DateTime $date): CurrencyData
+    public function setDate(?\DateTime $date): Response
     {
         $this->date = $date;
 
@@ -70,7 +55,7 @@ class CurrencyData
         return $this->previousDate;
     }
 
-    public function setPreviousDate(?\DateTime $previousDate): CurrencyData
+    public function setPreviousDate(?\DateTime $previousDate): Response
     {
         $this->previousDate = $previousDate;
 
@@ -82,7 +67,7 @@ class CurrencyData
         return $this->previousURL;
     }
 
-    public function setPreviousURL(?string $previousURL): CurrencyData
+    public function setPreviousURL(?string $previousURL): Response
     {
         $this->previousURL = $previousURL;
 
@@ -94,7 +79,7 @@ class CurrencyData
         return $this->timestamp;
     }
 
-    public function setTimestamp(int $timestamp): CurrencyData
+    public function setTimestamp(int $timestamp): Response
     {
         $this->timestamp = $timestamp;
 
@@ -112,7 +97,7 @@ class CurrencyData
     /**
      * @param array<Currency> $valutes
      */
-    public function setValutes(array $valutes): CurrencyData
+    public function setValutes(array $valutes): Response
     {
         $this->valutes = $valutes;
 
@@ -137,6 +122,10 @@ class CurrencyData
     public function getValute(string $charCode): Currency
     {
         foreach ($this->getValutes() as $valute) {
+            if (!($valute instanceof Currency)) {
+                $valute = new Currency($valute);
+            }
+
             if ($charCode === $valute->getCharCode()) {
                 return $valute;
             }

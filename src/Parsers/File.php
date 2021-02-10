@@ -5,7 +5,7 @@ namespace MaxCurrency\Parser;
 use MaxCurrency\Exception\InternalServerException;
 use MaxCurrency\Exception\NotFoundException;
 use MaxCurrency\ParserAbstract;
-use MaxCurrency\Entity\CurrencyData;
+use MaxCurrency\Response;
 
 /**
  * Parser model of file
@@ -14,7 +14,12 @@ use MaxCurrency\Entity\CurrencyData;
  */
 final class File extends ParserAbstract
 {
-    protected function request(): CurrencyData
+    protected function getLoggerName(): string
+    {
+        return 'FileParser';
+    }
+
+    protected function request(): Response
     {
         $response = json_decode(file_get_contents(ParserAbstract::API_URL), true);
         if (!(JSON_ERROR_NONE === json_last_error())) {
@@ -25,6 +30,6 @@ final class File extends ParserAbstract
             throw new NotFoundException('Response not found');
         }
 
-        return new CurrencyData($response);
+        return new Response($response);
     }
 }

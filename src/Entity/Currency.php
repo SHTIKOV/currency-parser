@@ -2,17 +2,15 @@
 
 namespace MaxCurrency\Entity;
 
-use MaxCurrency\CommonClasses\StrictFillTrait;
+use MaxCurrency\CommonClasses\FillableAbstract;
 
 /**
  * Currency
  *
  * @author Konstantin Shtykov <konstantine.shtikov@yandex.ru>
  */
-class Currency
+class Currency extends FillableAbstract
 {
-    use StrictFillTrait;
-
     const DEFAULT_NAME = 'None';
 
     /** @var string|null */
@@ -30,23 +28,9 @@ class Currency
     /** @var float */
     private $previous = 0.0;
 
-
-    /**
-     * @param array<mixed> $data
-     */
-    public function __construct(array $data)
-    {
-        $this->fill($data);
-    }
-
-
-    /**
-     * @param array<mixed> $data
-     */
+    
     protected function fill(array $data): Currency
     {
-        $this->checkFields($data);
-        
         $this->setId($data['ID']);
         $this->setNumCode($data['NumCode']);
         $this->setCharCode($data['CharCode']);
