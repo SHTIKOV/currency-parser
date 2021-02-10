@@ -49,5 +49,5 @@ For more see **Makefile**.
 <?php
 use MaxCurrency\Parser\Curl;
 
-$currency = (new Curl())->getCurrencyData($currency);
+$currency = (new Curl())->execute($currency);
 ```

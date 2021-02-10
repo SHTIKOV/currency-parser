@@ -25,13 +25,13 @@ class ParserTest extends TestCase
     private function testParser(ParserAbstract $parser): void
     {
         $currencyName = 'AUD';
-        $currency = $parser->getCurrencyData($currencyName);
+        $currency = $parser->execute($currencyName);
 
         $this->assertInstanceOf(Currency::class, $currency);
         $this->assertSame($currency->getCharCode(), $currencyName);
 
         try {
-            $currency = $parser->getCurrencyData('undefined');
+            $currency = $parser->execute('undefined');
         } catch (\Throwable $th) {
             $this->assertInstanceOf(NotFoundException::class, $th);
         }

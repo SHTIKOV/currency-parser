@@ -22,21 +22,35 @@ abstract class ParserAbstract
     /** @var Logger */
     public $logger;
 
+    /** @var ConfigAbstract */
+    private $config;
 
-    public function __construct()
+
+    public function __construct(ConfigAbstract $config)
     {
+        $this->logger = $config;
         $this->logger = new Logger($this->getLoggerName());
         $this->logger->pushHandler(new StreamHandler('var/logs.log', Logger::WARNING));
     }
 
 
-    public function getCurrencyData(string $currency): Currency
+    abstract protected function getLoggerName(): string;
+
+    abstract protected function request(): Response;
+
+    public function setConfig(ConfigAbstract $config): ParserAbstract
+    {
+        $this->config = $config;
+        return $this;
+    }
+
+    public function execute(string $currency): Currency
     {
         try {
             /** @var Response */
             $response = $this->request();
 
-            return $response->getValute($currency);
+            $currency = $response->getValute($currency);
         } catch (\Throwable $th) {
             if ($th instanceof LoggableExceptionInterface) {
                 $this->logger->error('Message: '.$th->getMessage().', Error code: '.$th->getCode());
@@ -44,8 +58,4 @@ abstract class ParserAbstract
             throw $th;
         }
     }
-
-    abstract protected function getLoggerName(): string;
-
-    abstract protected function request(): Response;
 }

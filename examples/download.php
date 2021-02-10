@@ -8,6 +8,7 @@ use MaxCurrency\Parser\{
     Curl,
     File
 };
+use MaxCurrency\Saver\File\Config;
 
 if ($argc > 2) {
     echo "
@@ -22,11 +23,11 @@ if ($argc > 1) {
     $currency = $argv[1];
 }
 
-$data = (new Curl())->getCurrencyData($currency);
-dump($data);
+$config = new Config();
 
-$data = (new File())->getCurrencyData($currency);
-dump($data);
+$data = (new Curl($config))->execute($currency);
+
+$data = (new File($config))->execute($currency);
 
 echo "
         \e[1;32mDone!\e[0m

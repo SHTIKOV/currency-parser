@@ -14,6 +14,7 @@ use MaxCurrency\Response;
  */
 final class Curl extends ParserAbstract
 {
+
     protected function getLoggerName(): string
     {
         return 'CurlParser';
