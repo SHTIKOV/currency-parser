@@ -2,11 +2,14 @@
 
 require_once __DIR__ . '/../src/ParserAbstract.php';
 
-$curlParser = new MaxCurrency\Parser\Curl();
-$data = $curlParser->getCurrencyData('AUD');
+use MaxCurrency\Parser\{
+    Curl,
+    File
+};
+
+$data = (new Curl())->getCurrencyData('AUD');
 dump($data);
 
-$fileParser = new MaxCurrency\Parser\File();
-$data = $fileParser->getCurrencyData('AUD');
+$data = (new File())->getCurrencyData('AUD');
 dump($data);
 
