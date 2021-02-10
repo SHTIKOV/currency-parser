@@ -3,7 +3,7 @@
 namespace MaxCurrency\Parser;
 
 use MaxCurrency\Exception\InternalServerException;
-use MaxCurrency\Exception\NotFoundException;
+use MaxCurrency\Exception\Loggable\NotFoundException;
 use MaxCurrency\ParserAbstract;
 use MaxCurrency\Response;
 

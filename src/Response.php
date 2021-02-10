@@ -2,7 +2,7 @@
 
 namespace MaxCurrency;
 
-use MaxCurrency\Exception\NotFoundException;
+use MaxCurrency\Exception\Loggable\NotFoundException;
 use MaxCurrency\CommonClasses\FillableAbstract;
 use MaxCurrency\Entity\Currency;
 

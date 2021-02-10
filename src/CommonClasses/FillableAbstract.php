@@ -2,7 +2,7 @@
 
 namespace MaxCurrency\CommonClasses;
 
-use MaxCurrency\Exception\BadRequestException;
+use MaxCurrency\Exception\Loggable\BadRequestException;
 
 /**
  * Strict fill

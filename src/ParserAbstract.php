@@ -8,6 +8,7 @@ use MaxCurrency\Entity\Currency;
 use MaxCurrency\Response;
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
+use MaxCurrency\Exception\Loggable\ExceptionInterface as LoggableExceptionInterface;
 
 /**
  * Parser
@@ -33,10 +34,13 @@ abstract class ParserAbstract
     {
         try {
             /** @var Response */
-            $currencyData = $this->request();
-            return $currencyData->getValute($currency);
+            $response = $this->request();
+
+            return $response->getValute($currency);
         } catch (\Throwable $th) {
-            $this->logger->error('Message: '.$th->getMessage().', Error code: '.$th->getCode());
+            if ($th instanceof LoggableExceptionInterface) {
+                $this->logger->error('Message: '.$th->getMessage().', Error code: '.$th->getCode());
+            }
             throw $th;
         }
     }
