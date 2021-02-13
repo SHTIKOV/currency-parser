@@ -11,5 +11,4 @@ use MaxCurrency\Exception;
  */
 class NotFoundException extends Exception\BadRequestException implements ExceptionInterface
 {
-
 }

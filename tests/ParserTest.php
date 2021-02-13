@@ -1,37 +1,50 @@
 <?php declare (strict_types=1);
 
 use PHPUnit\Framework\TestCase;
-use MaxCurrency\Entity\Currency;
 use MaxCurrency\Exception\Loggable\NotFoundException;
 use MaxCurrency\ParserAbstract;
 use MaxCurrency\Parser\{
     Curl,
     File
 };
+use MaxCurrency\Saver\File as FileSaver;
 
+/**
+ * Simple test of parser work
+ * 
+ * @author Konstantin Shtykov <konstantine.shtikov@yandex.ru>
+ */
 class ParserTest extends TestCase
 {
+    const PATH = __DIR__ . '/downloadedData.txt';
 
     public function testCurlParser(): void
     {
-        $this->testParser(new Curl());
+        $config = new FileSaver(ParserTest::PATH);
+
+        $curl = new Curl($config);
+        $this->testParser($curl);
     }
 
     public function testFileParser(): void
     {
-        $this->testParser(new File());
+        $config = new FileSaver(ParserTest::PATH);
+
+        $file = new File($config);
+        $this->testParser($file);
     }
 
     private function testParser(ParserAbstract $parser): void
     {
-        $currencyName = 'AUD';
-        $currency = $parser->getCurrencyData($currencyName);
+        $parser->execute(['EUR', 'USD']);
 
-        $this->assertInstanceOf(Currency::class, $currency);
-        $this->assertSame($currency->getCharCode(), $currencyName);
+        $stringData = file_get_contents(ParserTest::PATH, true);
+        $arrayData = \explode(PHP_EOL, $stringData);
+        
+        $this->assertTrue(1 < count($arrayData), 'Expects more strings then 1');
 
         try {
-            $currency = $parser->getCurrencyData('undefined');
+            $parser->execute(['undefined']);
         } catch (\Throwable $th) {
             $this->assertInstanceOf(NotFoundException::class, $th);
         }

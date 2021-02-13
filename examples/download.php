@@ -2,33 +2,12 @@
 
 require_once __DIR__ . '/../src/ParserAbstract.php';
 
-ini_set('register_argc_argv', '1');
+use MaxCurrency\Parser\Curl;
+use MaxCurrency\Saver\File;
 
-use MaxCurrency\Parser\{
-    Curl,
-    File
-};
+$config = new File(__DIR__ . '/downloadedData.txt');
 
-if ($argc > 2) {
-    echo "
-        \e[1;31mOnly one argument required\e[0m
+$curl = new Curl($config);
+$curl->execute();
 
-";
-    exit;
-}
-
-$currency = 'AUD';
-if ($argc > 1) {
-    $currency = $argv[1];
-}
-
-$data = (new Curl())->getCurrencyData($currency);
-dump($data);
-
-$data = (new File())->getCurrencyData($currency);
-dump($data);
-
-echo "
-        \e[1;32mDone!\e[0m
-
-";
+echo PHP_EOL . "        \e[1;32mDone!\e[0m" . PHP_EOL . PHP_EOL;

@@ -91,7 +91,12 @@ class Response extends FillableAbstract
      */
     public function getValutes(): array
     {
-        return $this->valutes;
+        return $this->valutes = array_map(function ($valute) {
+            if (!($valute instanceof Currency)) {
+                $valute = new Currency($valute);
+            }
+            return $valute;
+        }, $this->valutes);
     }
 
     /**
@@ -117,20 +122,19 @@ class Response extends FillableAbstract
 
 
     /**
-     * @throws NotFoundException
+     * @param array<string> $charCodes
+     * @return array<Currency>
      */
-    public function getValute(string $charCode): Currency
+    public function getValute(array $charCodes = []): array
     {
+        $output = [];
         foreach ($this->getValutes() as $valute) {
-            if (!($valute instanceof Currency)) {
-                $valute = new Currency($valute);
+            if (0 < \count($charCodes) && !\in_array($valute->getCharCode(), $charCodes)) {
+                continue;
             }
-
-            if ($charCode === $valute->getCharCode()) {
-                return $valute;
-            }
+            $output[] = $valute;
         }
 
-        throw new NotFoundException('Currency not found');
+        return $output;
     }
 }

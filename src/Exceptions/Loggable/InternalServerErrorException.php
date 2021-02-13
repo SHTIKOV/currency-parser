@@ -5,10 +5,10 @@ namespace MaxCurrency\Exception\Loggable;
 use MaxCurrency\Exception;
 
 /**
- * BadRequestException.
+ * InternalServerErrorException.
  *
  * @author Константин Штыков <konstantine.shtikov@yandex.ru>
  */
-class BadRequestException extends Exception\BadRequestException implements ExceptionInterface
+class InternalServerErrorException extends Exception\BadRequestException implements ExceptionInterface
 {
 }

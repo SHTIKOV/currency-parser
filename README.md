@@ -48,6 +48,10 @@ For more see **Makefile**.
 ```php
 <?php
 use MaxCurrency\Parser\Curl;
+use MaxCurrency\Saver\File;
 
-$currency = (new Curl())->getCurrencyData($currency);
+$config = new File(__DIR__ . '/downloadedData.txt');
+
+$curl = new Curl($config);
+$curl->execute($currencies);
 ```
