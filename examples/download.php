@@ -23,11 +23,10 @@ if ($argc > 1) {
     $currency = $argv[1];
 }
 
-$config = new Config();
+$config = new Config(__DIR__ . '/downloadedData.txt');
 
-$data = (new Curl($config))->execute($currency);
-
-$data = (new File($config))->execute($currency);
+$curl = new Curl($config);
+$curl->execute($currency);
 
 echo "
         \e[1;32mDone!\e[0m

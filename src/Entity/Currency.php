@@ -3,13 +3,14 @@
 namespace MaxCurrency\Entity;
 
 use MaxCurrency\CommonClasses\FillableAbstract;
+use MaxCurrency\CommonClasses\FileSavableInterfase;
 
 /**
  * Currency
  *
  * @author Konstantin Shtykov <konstantine.shtikov@yandex.ru>
  */
-class Currency extends FillableAbstract
+class Currency extends FillableAbstract implements FileSavableInterfase
 {
     const DEFAULT_NAME = 'None';
 
@@ -124,5 +125,10 @@ class Currency extends FillableAbstract
         $this->previous = $previous;
 
         return $this;
+    }
+
+    public function toFileString(): string
+    {
+        return "{$this->getName()} (ID: {$this->getId()}, NumCode: {$this->getNumCode()}, CharCode: {$this->getCharCode()}): {$this->getValue()}";
     }
 }

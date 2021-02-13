@@ -4,7 +4,7 @@ namespace MaxCurrency;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
-use MaxCurrency\Entity\Currency;
+use MaxCurrency\CommonClasses\FillableAbstract;
 use MaxCurrency\Response;
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
@@ -28,7 +28,7 @@ abstract class ParserAbstract
 
     public function __construct(ConfigAbstract $config)
     {
-        $this->logger = $config;
+        $this->config = $config;
         $this->logger = new Logger($this->getLoggerName());
         $this->logger->pushHandler(new StreamHandler('var/logs.log', Logger::WARNING));
     }
@@ -44,13 +44,21 @@ abstract class ParserAbstract
         return $this;
     }
 
-    public function execute(string $currency): Currency
+    public function getConfig(): ConfigAbstract
+    {
+        return $this->config;
+    }
+
+    public function execute(string $currency): FillableAbstract
     {
         try {
             /** @var Response */
             $response = $this->request();
 
-            $currency = $response->getValute($currency);
+            $entity = $response->getValute($currency);
+            $this->config->prepareData($entity)->save();
+
+            return $entity;
         } catch (\Throwable $th) {
             if ($th instanceof LoggableExceptionInterface) {
                 $this->logger->error('Message: '.$th->getMessage().', Error code: '.$th->getCode());

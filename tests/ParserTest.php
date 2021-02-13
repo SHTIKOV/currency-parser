@@ -8,26 +8,35 @@ use MaxCurrency\Parser\{
     Curl,
     File
 };
+use MaxCurrency\Saver\File\Config;
 
 class ParserTest extends TestCase
 {
 
     public function testCurlParser(): void
     {
-        $this->testParser(new Curl());
+        $config = new Config(__DIR__ . '/downloadedData.txt');
+
+        $curl = new Curl($config);
+        $this->testParser($curl);
     }
 
     public function testFileParser(): void
     {
-        $this->testParser(new File());
+        $config = new Config(__DIR__ . '/downloadedData.txt');
+
+        $file = new File($config);
+        $this->testParser($file);
     }
 
     private function testParser(ParserAbstract $parser): void
     {
         $currencyName = 'AUD';
+
         $currency = $parser->execute($currencyName);
 
         $this->assertInstanceOf(Currency::class, $currency);
+        /** @var Currency $currency */
         $this->assertSame($currency->getCharCode(), $currencyName);
 
         try {
