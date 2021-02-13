@@ -1,3 +1,5 @@
 /vendor/
 /var/
 *.php_cs.cache
+/examples/downloadedData.txt
+/tests/downloadedData.txt

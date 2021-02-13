@@ -22,11 +22,11 @@ abstract class ParserAbstract
     /** @var Logger */
     public $logger;
 
-    /** @var ConfigAbstract */
+    /** @var FileAbstract */
     private $config;
 
 
-    public function __construct(ConfigAbstract $config)
+    public function __construct(FileAbstract $config)
     {
         $this->config = $config;
         $this->logger = new Logger($this->getLoggerName());
@@ -38,27 +38,28 @@ abstract class ParserAbstract
 
     abstract protected function request(): Response;
 
-    public function setConfig(ConfigAbstract $config): ParserAbstract
+    public function setConfig(FileAbstract $config): ParserAbstract
     {
         $this->config = $config;
         return $this;
     }
 
-    public function getConfig(): ConfigAbstract
+    public function getConfig(): FileAbstract
     {
         return $this->config;
     }
 
-    public function execute(string $currency): FillableAbstract
+    /**
+     * @param array<string> $currencies
+     */
+    public function execute(array $currencies = []): void
     {
         try {
             /** @var Response */
             $response = $this->request();
 
-            $entity = $response->getValute($currency);
-            $this->config->prepareData($entity)->save();
-
-            return $entity;
+            $entities = $response->getValute($currencies);
+            $this->config->prepareData($entities)->save();
         } catch (\Throwable $th) {
             if ($th instanceof LoggableExceptionInterface) {
                 $this->logger->error('Message: '.$th->getMessage().', Error code: '.$th->getCode());
