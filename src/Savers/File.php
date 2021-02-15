@@ -4,7 +4,7 @@ namespace MaxCurrency\Saver;
 
 use MaxCurrency\Exception\Loggable\NotFoundException;
 use MaxCurrency\Exception\Loggable\InternalServerErrorException;
-use MaxCurrency\FileAbstract;
+use MaxCurrency\SaverAbstract;
 use MaxCurrency\CommonClasses\FileSavableInterfase;
 
 /**
@@ -12,7 +12,7 @@ use MaxCurrency\CommonClasses\FileSavableInterfase;
  *
  * @author Konstantin Shtykov <konstantine.shtikov@yandex.ru>
  */
-final class File extends FileAbstract
+final class File extends SaverAbstract
 {
     /** @var string */
     public $file;
@@ -34,22 +34,22 @@ final class File extends FileAbstract
      */
     public function save(): void
     {
-        if (FileAbstract::DEFAULT_CONTENT === $this->content) {
+        if (SaverAbstract::DEFAULT_CONTENT === $this->content) {
             throw new NotFoundException('Save: Content not found, before save you need prepare data.');
         }
-        if (false === \file_put_contents($this->file, $this->content) && ($this->countRetries + 1) < FileAbstract::MAX_COUNT_RETRIES) {
+        if (false === \file_put_contents($this->file, $this->content) && ($this->countRetries + 1) < SaverAbstract::MAX_COUNT_RETRIES) {
             $this->countRetries++;
             $this->save();
             return;
         }
 
         $exception = null;
-        if (FileAbstract::MAX_COUNT_RETRIES <= $this->countRetries) {
+        if (SaverAbstract::MAX_COUNT_RETRIES <= $this->countRetries) {
             $exception = new InternalServerErrorException('Save: Content not saved');
         }
 
         $this->countRetries = 0;
-        $this->content = FileAbstract::DEFAULT_CONTENT;
+        $this->content = SaverAbstract::DEFAULT_CONTENT;
         
         if (!(null === $exception)) {
             throw $exception;
@@ -59,7 +59,7 @@ final class File extends FileAbstract
     /**
      * @param array<FileSavableInterfase> $entities
      */
-    public function prepareData(array $entities): FileAbstract
+    public function prepareData(array $entities): SaverAbstract
     {
         $this->content = '';
         foreach ($entities as $index => $entity) {
