@@ -22,11 +22,11 @@ abstract class ParserAbstract
     /** @var Logger */
     public $logger;
 
-    /** @var FileAbstract */
+    /** @var SaverAbstract */
     private $config;
 
 
-    public function __construct(FileAbstract $config)
+    public function __construct(SaverAbstract $config)
     {
         $this->config = $config;
         $this->logger = new Logger($this->getLoggerName());
@@ -38,13 +38,13 @@ abstract class ParserAbstract
 
     abstract protected function request(): Response;
 
-    public function setConfig(FileAbstract $config): ParserAbstract
+    public function setConfig(SaverAbstract $config): ParserAbstract
     {
         $this->config = $config;
         return $this;
     }
 
-    public function getConfig(): FileAbstract
+    public function getConfig(): SaverAbstract
     {
         return $this->config;
     }

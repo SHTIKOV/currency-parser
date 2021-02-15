@@ -7,11 +7,11 @@ require_once __DIR__ . '/../vendor/autoload.php';
 use MaxCurrency\CommonClasses\FileSavableInterfase;
 
 /**
- * FileAbstract
+ * SaverAbstract
  *
  * @author Konstantin Shtykov <konstantine.shtikov@yandex.ru>
  */
-abstract class FileAbstract
+abstract class SaverAbstract
 {
     const DEFAULT_CONTENT = 'NONE';
     const MAX_COUNT_RETRIES = 3;
@@ -22,7 +22,7 @@ abstract class FileAbstract
     /**
      * @param array<FileSavableInterfase> $entities
      */
-    abstract public function prepareData(array $entities): FileAbstract;
+    abstract public function prepareData(array $entities): SaverAbstract;
 
     abstract public function save(): void;
 }
